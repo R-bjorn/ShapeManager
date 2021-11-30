@@ -15,7 +15,12 @@ public class SmellyCode extends JPanel {
     
     
     public static void main(String[] args) {
-        //Create and set up the window.
+        StartDrawing();
+    }
+    
+    // Method that does everything in main
+    public static void StartDrawing() {
+    	//Create and set up the window.
         JFrame frame = new JFrame("MouseEventDemo");
         
         //Create and set up the content pane
@@ -26,21 +31,16 @@ public class SmellyCode extends JPanel {
         frame.pack();
         frame.setVisible(true);
     }
-    
-    public SmellyCode() {
-        super(new GridLayout(0,1));							//Don't worry about this, it's just another layout manager
-        drawingArea = new DrawingArea();						//Instantiate our blank area
-        add(drawingArea);										//Add this to our panel
-        textArea = new JTextArea();							//Create the text area
-        textArea.setEditable(false);						//Don't let the user edit the text
-        JScrollPane scrollPane = new JScrollPane(textArea);	//Add a scrollbar to the text
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); //Have the vertical scroll always there
-                
-        scrollPane.setPreferredSize(new Dimension(200, 200));
-        add(scrollPane);									//Add the scrollbar to the panel
-        
-        
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 3));
+
+    public void createAllButtons() {
+    	
+    	
+    	for(int i : new int[]{ 1,2,3,4,5,6}) {
+    		
+    	}
+    }
+    public void AddButtons() {
+    	JPanel buttonPanel = new JPanel(new GridLayout(2, 3));
         
         JButton buttonMove = new JButton("Move");
         buttonMove.addActionListener(new ActionListener(){
@@ -83,7 +83,7 @@ public class SmellyCode extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//drawingArea.mergeAll();
+				drawingArea.mergeAll();
 			} 
         });
         
@@ -92,7 +92,7 @@ public class SmellyCode extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//drawingArea.unmergeAll();
+				drawingArea.unmergeAll();
 			} 
         });
         
@@ -103,8 +103,20 @@ public class SmellyCode extends JPanel {
         buttonPanel.add(buttonMerge);
         buttonPanel.add(buttonUnmerge);
         add(buttonPanel);
-        
-        //Register for mouse events on drawingArea and the panel.
+    }
+    public void DrawingArea() {
+        drawingArea = new DrawingArea();						//Instantiate our blank area
+        add(drawingArea);										//Add this to our panel
+        textArea = new JTextArea();							//Create the text area
+        textArea.setEditable(false);						//Don't let the user edit the text
+        JScrollPane scrollPane = new JScrollPane(textArea);	//Add a scrollbar to the text
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); //Have the vertical scroll always there
+                
+        scrollPane.setPreferredSize(new Dimension(200, 200));
+        add(scrollPane);									//Add the scrollbar to the panel
+    }
+    public void Log() {
+    	//Register for mouse events on drawingArea and the panel.
         drawingArea.addMouseListener(new MouseListener(){
         	public void mousePressed(MouseEvent e) {				//Mouse pressed event
                 eventOutput("Mouse pressed on drawingArea (# of clicks: "				//Fires when the mouse is pushed down
@@ -189,6 +201,16 @@ public class SmellyCode extends JPanel {
         
         setPreferredSize(new Dimension(600, 600));
         setBorder(BorderFactory.createEmptyBorder(20,20,20,20));	//Adds a border to the panel
+    }
+    
+    public SmellyCode() {
+    	super(new GridLayout(0,1));							//Don't worry about this, it's just another layout manager
+        // Add Drawing Area
+    	DrawingArea();
+        // Adding Buttons Method 
+        AddButtons();
+        // Log Method
+        Log();
     }
     
     void eventOutput(String eventDescription) {		//We just forward mouse events to this method

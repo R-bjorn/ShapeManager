@@ -1,8 +1,12 @@
 import javax.swing.*;
+
+import shapes.Rectangle;
+
 import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import shapes.*;
 
 public class DrawingArea extends JLabel {
     Dimension minSize = new Dimension(100, 50);
@@ -18,7 +22,9 @@ public class DrawingArea extends JLabel {
     
     private State state = State.Start;
     
-    private ArrayList<Rectangle> shapes = new ArrayList<Rectangle>();
+    private ArrayList<Shape> shapes = new ArrayList<Shape>();
+	// ArrayList for Backup of all merged shapes 
+	private ArrayList<Shape> shapesBackup = new ArrayList<Shape>();
     
     public DrawingArea() {
     	this.setBackground(Color.BLACK);
@@ -51,7 +57,7 @@ public class DrawingArea extends JLabel {
     	if (x1 == 0 && x2 == 0 && y1 == 0 && y2 == 0) return;
     	
     	if (state == State.Moving){
-    		for (Rectangle s: shapes) {
+    		for (Shape s: shapes) {
 	    		s.move(x1, y1, x2, y2);
 	    		s.paint(g);
     		}
@@ -59,8 +65,14 @@ public class DrawingArea extends JLabel {
     	else if (state == State.Rectangle) {
         	shapes.add(new Rectangle(x1, y1, x2-x1, y2-y1, Color.BLUE));
     	}
+    	else if (state == State.Triangle) {
+//    		shapes.add(new Triangle(x1 , y1 , x2-x1 , y2-y1 , y2+y1 , x1+x2+y, Color.RED));
+    	}
+    	else if (state == State.Oval) {
+//    		shape.add(new Oval());
+    	}
 
-    	for (Rectangle s: shapes){
+    	for (Shape s: shapes){
     		s.paint(g);
     	}
     }
@@ -72,4 +84,27 @@ public class DrawingArea extends JLabel {
     public State getState() {
     	return state;
     }
+
+    public void mergeAll() {
+    	// One compositeShape for all the merged shapes
+    	CompositeShape merged = new CompositeShape();
+    	for(Shape s : shapes) {
+    		shapesBackup.add(s);
+    		merged.addShape(s);
+    	} 
+    	shapes.clear();
+    	shapes.add(merged);
+    }
+    
+    public void unmergeAll() {
+    	if(shapesBackup.isEmpty()) return;
+    	
+    	shapes.clear();
+    	for(Shape s : shapesBackup) {
+    		shapes.add(s);
+    	}
+    	shapesBackup.clear();
+    }
+    
+    
 }
