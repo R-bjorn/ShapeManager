@@ -1,13 +1,14 @@
-import java.awt.Color;
+package shapes;
+
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Color;
 
-public class Rectangle{
-
-	private Color color;
+public class Rectangle extends AtomicShape{
 
 	protected int x, y, width, height;
 	
-	protected Rectangle(int x, int y, int width, int height, Color color) {
+	public Rectangle(int x, int y, int width, int height, Color color) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -15,6 +16,7 @@ public class Rectangle{
 		this.color = color;
 	}
     
+	@Override
     public void move(int buttonDownX, int buttonDownY, int newx, int newy) {
     	if (buttonDownX >= this.x && buttonDownX <= this.x + this.width)
     	{
@@ -24,7 +26,8 @@ public class Rectangle{
         	}
     	}
     }
-    
+	
+	@Override   
     protected void changeCoords(int buttonDownX, int buttonDownY, int newx, int newy) {
 		int deltaX = this.x - buttonDownX;
     	int deltaY = this.y - buttonDownY;
@@ -32,10 +35,11 @@ public class Rectangle{
     	this.y = newy + deltaY;
     }
     
-    public void paint(Graphics g){
-    	g.setColor(color);
-    	g.drawRect(x, y, width, height);
-    }
+    @Override
+	public void paint(Graphics g) {
+    	Graphics2D g2d = (Graphics2D) g;
+    	g2d.drawRect(x,y,width,height);    	
+	}
     
     @Override
     public String toString() {
